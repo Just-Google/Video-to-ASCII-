@@ -3,7 +3,7 @@ import os
 import time
 import cv2
 
-def altConvertASCII(image, newSize): #convert pil image to ASCII art
+def convertASCII(image, newSize): #convert pil image to ASCII art
     altText = ""
     gscale = "@%#*+=-:. "
     gscale2 = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,\"^`'. " 
@@ -29,7 +29,7 @@ def convertVideo(videoFile, frameRate, newSize): #convert video to ASCII art, re
     arrASCII = []
 
     while success: #get the following frame with framerate gap
-        arrASCII.append(altConvertASCII(image, newSize))
+        arrASCII.append(convertASCII(image, newSize))
         sec = sec + frameRate
         sec = round(sec, 2)
         success, image = getFrame(sec, vidcap)
