@@ -3,7 +3,44 @@ import os
 import time
 import cv2
 
-def altConvertASCII(image, newSize): #convert pil image to ASCII art
+def getAverage(image):
+    px = image.load()
+    average = 0
+    num = 0
+    for x in range(image.size[0]):
+        for y in range(image.size[1]):
+            average+=px[x, y]
+            num+=1
+    return average / num
+
+def altConvertASCII(file): #use average instead of shrinking image
+    text = []
+    altText = ""
+    gscale = "@%#*+=-:. " 
+
+    image = Image.open(file).convert('L')
+    imageW, imageH = image.size[0], image.size[1]
+
+    resultW, resultH = 50, int(imageH/imageW*70)
+    cropSize = int(imageW/resultW)
+    row = int(imageH/cropSize)
+
+    # print('image size: {}, {}'.format(imageW, imageH))
+    # print('result size: {}, {}'.format(resultW, resultH))
+    # print('crop size: {}, row: {}'.format(cropSize, row))
+
+    for y in range(0, imageH, cropSize):
+        arr = []
+        for x in range(0, imageW, cropSize):
+            avg = getAverage(image.crop((x, y, x + cropSize, y + cropSize)))
+            arr.append(gscale[int((avg*9)/255)])
+            altText+=gscale[int((avg*9)/255)] + ' '
+        text.append(arr)
+        altText+='\n'
+
+    return altText
+
+def convertASCII(image, newSize): #convert pil image to ASCII art
     altText = ""
     gscale = "@%#*+=-:. "
     gscale2 = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,\"^`'. " 
@@ -29,7 +66,7 @@ def convertVideo(videoFile, frameRate, newSize): #convert video to ASCII art, re
     arrASCII = []
 
     while success: #get the following frame with framerate gap
-        arrASCII.append(altConvertASCII(image, newSize))
+        arrASCII.append(convertASCII(image, newSize))
         sec = sec + frameRate
         sec = round(sec, 2)
         success, image = getFrame(sec, vidcap)
