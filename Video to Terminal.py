@@ -61,15 +61,11 @@ def main():
             break
     
     frameRate = 1 / float(input('Enter the FPS of the ASCII Art (larger will take longer): '))
-
     newSize = int(input('Enter the ASCII Art Size (larger will take longer): '))
 
     print('Getting the Video Ready, Please Wait')
-
     text = convertVideo(file, frameRate, newSize)
-
     os.system('cls' if os.name == 'nt' else 'clear')
-
     check = input('Video Ready, Please Press Enter')
 
     for x in text: #print out the ASCII art with delay
