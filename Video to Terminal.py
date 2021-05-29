@@ -1,4 +1,4 @@
-from PIL import Image, ImageFilter
+from PIL import Image
 import os
 import time
 import cv2
